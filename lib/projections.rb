@@ -19,7 +19,14 @@ module Projections
       case event
       when Events::OrderCreated
         state[:orders] ||= []
-        state[:orders] << event.payload
+        state[:orders] << { **event.payload, items: [] }
+      when Events::ItemAddedToOrder
+        order = state[:orders].select { |chosen_order| chosen_order[:order_id] == event.payload[:order_id] }.first
+        state[:orders].delete_if { |chosen_order| chosen_order[:order_id] == event.payload[:order_id] }.first
+
+        order[:items] << event.payload
+
+        state[:orders] << order
       end
 
       state
