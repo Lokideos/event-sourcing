@@ -17,12 +17,19 @@ pp project.call(Projections::AllOrders.new, {}, events)
 puts '*' * 80
 
 event = Events::OrderCreated.new(payload: { order_id: SecureRandom.uuid, account_id: 1 })
-event_store.append(event)
+event_store.append(1, event)
 
-event_store.evolve(Producers::AddItem.new, account_id: 1, name: 'ruby sticker', cost: 10)
+event_store.evolve(1, Producers::AddItem.new, account_id: 1, name: 'ruby sticker', cost: 10)
 
-event_store.evolve(Producers::AddItem.new, account_id: 2, name: 'hanami sticker', cost: 5)
-event_store.evolve(Producers::AddItem.new, account_id: 2, name: 'ruby sticker', cost: 15)
+event_store.evolve(2, Producers::AddItem.new, account_id: 2, name: 'hanami sticker', cost: 5)
+event_store.evolve(2, Producers::AddItem.new, account_id: 2, name: 'ruby sticker', cost: 15)
 
 events = event_store.get
+pp project.call(Projections::AllOrders.new, {}, events)
+
+puts '*' * 80
+events = event_store.get_stream(1)
+pp project.call(Projections::AllOrders.new, {}, events)
+
+events = event_store.get_stream(2)
 pp project.call(Projections::AllOrders.new, {}, events)
