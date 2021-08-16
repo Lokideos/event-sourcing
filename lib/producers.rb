@@ -6,6 +6,7 @@ module Producers
       @project = Projections::Project.new
     end
 
+    # We expect to get events from event stream
     # payload:
     #   account_id
     #   name
@@ -13,8 +14,7 @@ module Producers
     #
     def call(events, payload)
       state = @project.call(Projections::AllOrders.new, {}, events)
-      orders = state[:orders]
-      order_for_account = orders.select { |order| order[:account_id] == payload[:account_id] }.first
+      order_for_account = state[:orders]&.first
 
       if order_for_account
         [

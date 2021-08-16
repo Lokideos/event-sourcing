@@ -7,20 +7,28 @@
 #   append(list of events -> nil)
 
 class EventStore
+  # store => { stream => [...] of events }
   def initialize
-    @store = []
+    @store = {}
   end
 
   def get
-    @store
+    @store.flat_map { |_stream, events| events }
   end
 
-  def append(*events)
-    events.each { |event| @store << event }
+  def get_stream(stream)
+    @store[stream] || {}
   end
 
-  def evolve(producer, payload)
-    new_events = producer.call(@store, payload)
-    @store += new_events
+  def append(stream, *events)
+    @store[stream] ||= []
+
+    events.each { |event| @store[stream] << event }
+  end
+
+  def evolve(stream, producer, payload)
+    events = get_stream(stream)
+    new_events = producer.call(events, payload)
+    @store[stream] = (@store[stream] || []) + new_events
   end
 end
