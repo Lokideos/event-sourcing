@@ -1,6 +1,7 @@
 # Event Sourcing
 
-This is example project for trying out event sourcing in Ruby
+This is example project for trying out event sourcing in Ruby  
+The project is inspired by [Anton Davidov Event Sourcing project](https://github.com/2pegramming/pepegraming-stream/tree/master/event_sourcing)
 
 ### Event sourcing
 * work with events
