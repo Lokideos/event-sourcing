@@ -18,4 +18,9 @@ class EventStore
   def append(*events)
     events.each { |event| @store << event }
   end
+
+  def evolve(producer, payload)
+    new_events = producer.call(@store, payload)
+    @store += new_events
+  end
 end
