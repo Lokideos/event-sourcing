@@ -3,6 +3,10 @@
 This is example project for trying out event sourcing in Ruby  
 The project is inspired by [Anton Davidov Event Sourcing project](https://github.com/2pegramming/pepegraming-stream/tree/master/event_sourcing)
 
+Gems for working with event sourcing:
+* [Rails Event Store](https://railseventstore.org/)
+* [Ruby Event Sourcing library](https://github.com/davydovanton/ivento)
+
 ### Event sourcing
 * work with events
 * no state (e.g. no DB tables)
